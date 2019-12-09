@@ -48,6 +48,8 @@ use yii\bootstrap\ActiveForm;
                <th scope="col">Имя</th>
                <th scope="col">Фамилия</th>
                <th scope="col">Эл. адрес</th>
+               <th scope="col">Организация</th>
+               <th scope="col">Обязанности</th>
                <th scope="col"></th>
                <th scope="col"></th>
            </tr>
@@ -58,6 +60,16 @@ use yii\bootstrap\ActiveForm;
                <td><?= $user['name'] ?></td>
                <td><?= $user['surname'] ?></td>
                <td><?= $user['email'] ?></td>
+               <td>
+                    <?php foreach ($user['organization'] as $organization): ?>
+                        <p><?= $organization['name']?></p>
+                    <?php endforeach; ?>
+               </td>
+                <td>
+                    <?php foreach ($user['duties'] as $duties): ?>
+                        <p><?= $duties['name']?></p>
+                    <?php endforeach; ?>
+                </td>
                <td><button class="btn btn-info edit" data-user='<?= json_encode($user) ?>'>Редактировать</button></td>
                <td><button class="btn btn-danger delete" data-id="<?= $user['id'] ?>">Удалять</button></td>
            </tr>
@@ -85,10 +97,20 @@ use yii\bootstrap\ActiveForm;
                     if (response.data.success === true) {
                         var user =  response.data.model,
                         json = JSON.stringify(response.data.model);
+                        var organization = '';
+                        for (i = 0;i < user['organization'].length;i++){
+                            organization += '<p>'+user["organization"][i]["name"]+'</p>';
+                        } 
+                        var duties = '';
+                        for (i = 0;i < user['duties'].length;i++){
+                            duties += '<p>'+user["duties"][i]["name"]+'</p>';
+                        }
                          var html = "\
                                     <td>"+user['name']+"</td>\
                                     <td>"+user['surname']+"</td>\
                                     <td>"+user['email']+"</td>\
+                                    <td>"+organization+"</td>\
+                                    <td>"+duties+"</td>\
                                     <td><button class='btn btn-info edit' data-user='"+json+"'>Редактировать</button></td>\
                                     <td><button class='btn btn-danger delete' data-id='"+user['id']+"'>Удалять</button></td>\
                             ";
